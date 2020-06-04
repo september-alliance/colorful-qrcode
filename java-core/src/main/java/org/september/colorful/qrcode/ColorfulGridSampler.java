@@ -75,14 +75,22 @@ public class ColorfulGridSampler extends GridSampler{
 	          
 	          if(isColorful) {
 	        	  //检查原图的rgb值
-	        	  RGBColor c = new RGBColor(originalBI.getRGB((int) points[x], (int) points[x + 1]));
+	        	  //获取原图四周的颜色，计算正确的颜色
+//	        	  if((int) points[x]==274 && (int) points[x + 1]==248) {
+//	        		  System.out.println();
+//	        	  }
+	        	  RGBColor c = getAvgColor((int) points[x], (int) points[x + 1]);
 		          //黑白互换 
-		          if(c.getRed()<127 && c.getGreen()<127 && c.getBlue()<127) {
+		          if(c.getRed()<90 && c.getGreen()<90 && c.getBlue()<90) {
+//		        	  if(!(c.getRed()==0 && c.getGreen()==0 && c.getBlue()==0)) {
+//		        		  System.out.println("we taking r="+c.getRed()+",g="+c.getGreen()+",b="+c.getBlue()+" as black at x="+ (int)points[x]+",y="+ (int)points[x+1]);
+//		        	  }
 		        	  c = RGBColor.WHITE;
-		          }else if(c.getRed()>=127 && c.getGreen()>=127 && c.getBlue()>=127) {
+		          }else if(c.getRed()>=190 && c.getGreen()>=190 && c.getBlue()>=190) {
+		        	  //认为 r,g,b全部大于190才是白色
 		        	  c = RGBColor.BLACK;
 		          }
-//		          System.out.println("r="+c.getRed()+",g="+c.getGreen()+",b="+c.getBlue()+",at x="+points[x]+",y="+points[x+1]);
+//		          System.out.println("r="+c.getRed()+",g="+c.getGreen()+",b="+c.getBlue()+",at x="+ (int)points[x]+",y="+ (int)points[x+1]);
 		          if(c.getRed()>=127) {
 		        	  redBits.set(x / 2, y);
 		          }
@@ -120,6 +128,22 @@ public class ColorfulGridSampler extends GridSampler{
 		throw NotFoundException.getNotFoundInstance();
 	}
 
+	private RGBColor getAvgColor(int x , int y) {
+		int padding=2;
+		RGBColor avgColor = null;
+		int r=0,g=0,b=0;
+		for(int col=x-padding;col<=x+padding;col++) {
+			for(int row=y-padding;row<y+padding;row++) {
+				RGBColor color = new RGBColor(originalBI.getRGB(col, row));
+				r += color.getRed();
+				g += color.getGreen();
+				b += color.getBlue();
+			}
+		}
+		avgColor = new RGBColor(r/25,g/25,b/25);
+		return avgColor;
+	}
+	
 	private boolean isColorful(PerspectiveTransform transform , int dimensionY) {
 		float[] points = new float[2 * dimensionY];
 		List<Integer> colors = new ArrayList<>();

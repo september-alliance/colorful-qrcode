@@ -31,6 +31,12 @@
 			<scope>test</scope>
 		</dependency>
 		
+		<dependency>
+			<groupId>org.september</groupId>
+			<artifactId>colorful-qrcode-j2ee</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		
 		<!-- 
 		<dependency>
 			<groupId>org.september</groupId>

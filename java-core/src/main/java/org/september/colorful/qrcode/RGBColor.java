@@ -1,9 +1,5 @@
 package org.september.colorful.qrcode;
 
-import java.awt.Paint;
-import java.awt.Transparency;
-import java.awt.color.ColorSpace;
-import java.awt.image.ColorModel;
 import java.beans.ConstructorProperties;
 
 public class RGBColor {
@@ -193,15 +189,6 @@ public class RGBColor {
      */
     private float falpha = 0.0f;
 
-    /**
-     * The {@code ColorSpace}.  If {@code null}, then it's
-     * default is sRGB.
-     * @serial
-     * @see #getColor
-     * @see #getColorSpace
-     * @see #getColorComponents
-     */
-    private ColorSpace cs = null;
 
     /*
      * JDK 1.1 serialVersionUID
@@ -431,56 +418,7 @@ public class RGBColor {
         fvalue = frgbvalue;
     }
 
-    /**
-     * Creates a color in the specified {@code ColorSpace}
-     * with the color components specified in the {@code float}
-     * array and the specified alpha.  The number of components is
-     * determined by the type of the {@code ColorSpace}.  For
-     * example, RGB requires 3 components, but CMYK requires 4
-     * components.
-     * @param cspace the {@code ColorSpace} to be used to
-     *                  interpret the components
-     * @param components an arbitrary number of color components
-     *                      that is compatible with the {@code ColorSpace}
-     * @param alpha alpha value
-     * @throws IllegalArgumentException if any of the values in the
-     *         {@code components} array or {@code alpha} is
-     *         outside of the range 0.0 to 1.0
-     * @see #getComponents
-     * @see #getColorComponents
-     */
-    public RGBColor(ColorSpace cspace, float components[], float alpha) {
-        boolean rangeError = false;
-        String badComponentString = "";
-        int n = cspace.getNumComponents();
-        fvalue = new float[n];
-        for (int i = 0; i < n; i++) {
-            if (components[i] < 0.0 || components[i] > 1.0) {
-                rangeError = true;
-                badComponentString = badComponentString + "Component " + i
-                                     + " ";
-            } else {
-                fvalue[i] = components[i];
-            }
-        }
-        if (alpha < 0.0 || alpha > 1.0) {
-            rangeError = true;
-            badComponentString = badComponentString + "Alpha";
-        } else {
-            falpha = alpha;
-        }
-        if (rangeError) {
-            throw new IllegalArgumentException(
-                "Color parameter outside of expected range: " +
-                badComponentString);
-        }
-        frgbvalue = cspace.toRGB(fvalue);
-        cs = cspace;
-        value = ((((int)(falpha*255)) & 0xFF) << 24) |
-                ((((int)(frgbvalue[0]*255)) & 0xFF) << 16) |
-                ((((int)(frgbvalue[1]*255)) & 0xFF) << 8)  |
-                ((((int)(frgbvalue[2]*255)) & 0xFF) << 0);
-    }
+  
 
     /**
      * Returns the red component in the range 0-255 in the default sRGB
@@ -1024,122 +962,5 @@ public class RGBColor {
         }
         return f;
     }
-
-    /**
-     * Returns a {@code float} array containing the color and alpha
-     * components of the {@code Color}, in the
-     * {@code ColorSpace} specified by the {@code cspace}
-     * parameter.  If {@code compArray} is {@code null}, an
-     * array with length equal to the number of components in
-     * {@code cspace} plus one is created for the return value.
-     * Otherwise, {@code compArray} must have at least this
-     * length, and it is filled in with the components and returned.
-     * @param cspace a specified {@code ColorSpace}
-     * @param compArray an array that this method fills with the
-     *          color and alpha components of this {@code Color} in
-     *          the specified {@code ColorSpace} and returns
-     * @return the color and alpha components in a {@code float}
-     *          array.
-     */
-    public float[] getComponents(ColorSpace cspace, float[] compArray) {
-        if (cs == null) {
-            cs = ColorSpace.getInstance(ColorSpace.CS_sRGB);
-        }
-        float f[];
-        if (fvalue == null) {
-            f = new float[3];
-            f[0] = ((float)getRed())/255f;
-            f[1] = ((float)getGreen())/255f;
-            f[2] = ((float)getBlue())/255f;
-        } else {
-            f = fvalue;
-        }
-        float tmp[] = cs.toCIEXYZ(f);
-        float tmpout[] = cspace.fromCIEXYZ(tmp);
-        if (compArray == null) {
-            compArray = new float[tmpout.length + 1];
-        }
-        for (int i = 0 ; i < tmpout.length ; i++) {
-            compArray[i] = tmpout[i];
-        }
-        if (fvalue == null) {
-            compArray[tmpout.length] = ((float)getAlpha())/255f;
-        } else {
-            compArray[tmpout.length] = falpha;
-        }
-        return compArray;
-    }
-
-    /**
-     * Returns a {@code float} array containing only the color
-     * components of the {@code Color} in the
-     * {@code ColorSpace} specified by the {@code cspace}
-     * parameter. If {@code compArray} is {@code null}, an array
-     * with length equal to the number of components in
-     * {@code cspace} is created for the return value.  Otherwise,
-     * {@code compArray} must have at least this length, and it is
-     * filled in with the components and returned.
-     * @param cspace a specified {@code ColorSpace}
-     * @param compArray an array that this method fills with the color
-     *          components of this {@code Color} in the specified
-     *          {@code ColorSpace}
-     * @return the color components in a {@code float} array.
-     */
-    public float[] getColorComponents(ColorSpace cspace, float[] compArray) {
-        if (cs == null) {
-            cs = ColorSpace.getInstance(ColorSpace.CS_sRGB);
-        }
-        float f[];
-        if (fvalue == null) {
-            f = new float[3];
-            f[0] = ((float)getRed())/255f;
-            f[1] = ((float)getGreen())/255f;
-            f[2] = ((float)getBlue())/255f;
-        } else {
-            f = fvalue;
-        }
-        float tmp[] = cs.toCIEXYZ(f);
-        float tmpout[] = cspace.fromCIEXYZ(tmp);
-        if (compArray == null) {
-            return tmpout;
-        }
-        for (int i = 0 ; i < tmpout.length ; i++) {
-            compArray[i] = tmpout[i];
-        }
-        return compArray;
-    }
-
-    /**
-     * Returns the {@code ColorSpace} of this {@code Color}.
-     * @return this {@code Color} object's {@code ColorSpace}.
-     */
-    public ColorSpace getColorSpace() {
-        if (cs == null) {
-            cs = ColorSpace.getInstance(ColorSpace.CS_sRGB);
-        }
-        return cs;
-    }
-
-    /**
-     * Returns the transparency mode for this {@code Color}.  This is
-     * required to implement the {@code Paint} interface.
-     * @return this {@code Color} object's transparency mode.
-     * @see Paint
-     * @see Transparency
-     * @see #createContext
-     */
-    public int getTransparency() {
-        int alpha = getAlpha();
-        if (alpha == 0xff) {
-            return Transparency.OPAQUE;
-        }
-        else if (alpha == 0) {
-            return Transparency.BITMASK;
-        }
-        else {
-            return Transparency.TRANSLUCENT;
-        }
-    }
-
 
 }

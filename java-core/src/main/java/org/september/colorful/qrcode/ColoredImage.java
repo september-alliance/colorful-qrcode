@@ -14,4 +14,8 @@ public interface ColoredImage {
 	public int getHeight();
 	
 	public int getWidth();
+	
+	public QRCodeBitMatrix getQRCodeBitMatrix();
+	
+	public void setQRCodeBitMatrix(QRCodeBitMatrix qRCodeBitMatrix);
 }

@@ -16,7 +16,6 @@
 
 package org.september.colorful.qrcode;
 
-import java.awt.Color;
 import java.util.Map;
 
 import com.google.zxing.EncodeHintType;
@@ -79,20 +78,21 @@ public final class ColorfulQRCodeWriter {
         	}
         }
         
-        drawImage(result,bitMatrix1,new Color(255,0,0));
-        drawImage(result,bitMatrix2,new Color(0,255,0));
-        drawImage(result,bitMatrix3,new Color(0,0,255));
+        drawImage(result,bitMatrix1,new RGBColor(255,0,0));
+        drawImage(result,bitMatrix2,new RGBColor(0,255,0));
+        drawImage(result,bitMatrix3,new RGBColor(0,0,255));
         //
         for (int x = 0; x < width; x++) {
         	for (int y = 0; y < height; y++) {
         		//黑白互换
         		if(isWhite(result.getRGB(x, y))) {
-        			result.setRGB(x, y, Color.BLACK.getRGB());
+        			result.setRGB(x, y, RGBColor.BLACK.getRGB());
         		}else if(isBlack(result.getRGB(x, y))) {
-        			result.setRGB(x, y, Color.WHITE.getRGB());
+        			result.setRGB(x, y, RGBColor.WHITE.getRGB());
         		}
         	}
         }
+        result.setQRCodeBitMatrix(bitMatrix1);
         return result;
 	}
 
@@ -161,7 +161,7 @@ public final class ColorfulQRCodeWriter {
   }
 
   
-  private void drawImage(ColoredImage image , QRCodeBitMatrix bitMatrix , Color color) {
+  private void drawImage(ColoredImage image , QRCodeBitMatrix bitMatrix , RGBColor color) {
 		 Version version = bitMatrix.getQrCode().getVersion();
       int[] tl = bitMatrix.getBitMatrix().getTopLeftOnBit();
       int totalModelNum = (version.getVersionNumber() - 1) * 4 + 5 + 16;    //获取单边模块数

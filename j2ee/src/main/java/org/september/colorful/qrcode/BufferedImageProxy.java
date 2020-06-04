@@ -6,40 +6,52 @@ import org.september.colorful.qrcode.ColoredImage;
 
 public class BufferedImageProxy implements ColoredImage{
 
-	private BufferedImage source;
+	private BufferedImage target;
+	
+	private QRCodeBitMatrix QRCodeBitMatrix;
 
 	public BufferedImageProxy(BufferedImage source) {
 		super();
-		this.source = source;
+		this.target = source;
 	}
 
 	@Override
 	public int getRGB(int x, int y) {
-		return source.getRGB(x, y);
+		return target.getRGB(x, y);
 	}
 
 	@Override
 	public void setRGB(int x, int y, int rgb) {
-		source.setRGB(x, y, rgb);
+		target.setRGB(x, y, rgb);
 	}
 
 	@Override
 	public void reset(int width, int height) {
-		source = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+		target = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 	}
 
 	@Override
 	public int getHeight() {
-		return source.getHeight();
+		return target.getHeight();
 	}
 
 	@Override
 	public int getWidth() {
-		return source.getWidth();
+		return target.getWidth();
 	}
 
-	public BufferedImage getSource() {
-		return source;
+	public BufferedImage getTarget() {
+		return target;
 	}
+
+	@Override
+	public QRCodeBitMatrix getQRCodeBitMatrix() {
+		return QRCodeBitMatrix;
+	}
+
+	public void setQRCodeBitMatrix(QRCodeBitMatrix qRCodeBitMatrix) {
+		QRCodeBitMatrix = qRCodeBitMatrix;
+	}
+	
 	
 }

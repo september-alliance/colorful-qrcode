@@ -2,7 +2,7 @@
 <meta charset="utf-8">
 <meta name="renderer" content="webkit">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>东鼎车辆超载测量与监控系统</title>
+<title>多彩码演示</title>
 <link rel="shortcut icon" href="/assets/pages/logo.png" type="image/x-icon" />
 <link rel="stylesheet" href="/assets/layuiadmin/layui/css/layui.css" media="all">
 <script src="/assets/common/jquery-2.0.3.min.js"></script>
@@ -10,12 +10,6 @@
 <script src="/assets/september/common.js?version=1.168"></script>
 <script src="/assets/september/htmlBuilder.js"></script>
 <script src="/assets/common/page.js"></script>
-
-<script src="/assets/viewer/viewer.js"></script>
-<script src="/assets/viewer/jquery-viewer.js"></script>
-<link rel="stylesheet" href="/assets/viewer/viewer.css" media="all">
-<script src="/assets/pages/common/commonBiz.js"></script>
-<script src="/assets/pages/common/globalFormValidator.js"></script>
 
 <style>
 .layui-upload-img {

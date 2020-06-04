@@ -6,6 +6,8 @@ import android.graphics.Bitmap;
 public class BitmapProxy implements ColoredImage {
 
 	private Bitmap bm;
+	
+	private QRCodeBitMatrix QRCodeBitMatrix;
 
 	public BitmapProxy(Bitmap bm) {
 		super();
@@ -39,5 +41,13 @@ public class BitmapProxy implements ColoredImage {
 
 	public Bitmap getBm() {
 		return bm;
+	}
+
+	public QRCodeBitMatrix getQRCodeBitMatrix() {
+		return QRCodeBitMatrix;
+	}
+
+	public void setQRCodeBitMatrix(QRCodeBitMatrix qRCodeBitMatrix) {
+		QRCodeBitMatrix = qRCodeBitMatrix;
 	}
 }
